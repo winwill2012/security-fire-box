@@ -1,8 +1,4 @@
-#ifndef MQTT_H
-#include <PubSubClient.h>
-#include <WiFi.h>
-#include <ws2812.hpp>
-#include <Infrared.hpp>
+#include <mqtt.h>
 
 const char *ssid = "Xiaomi_E15A";
 const char *password = "19910226";
@@ -12,6 +8,8 @@ const char *mqtt_password = "5887188QFGqfg!@#";
 
 WiFiClient espClient;
 PubSubClient mqtt_client(espClient);
+JsonDocument doc;
+char jsonBuffer[512];
 
 void setup_wifi()
 {
@@ -33,8 +31,8 @@ void reconnect()
 {
     while (!mqtt_client.connected())
     {
-        Serial.print("Attempting MQTT connection...");
-        if (mqtt_client.connect("ESP32-Client", mqtt_username, mqtt_password))
+        Serial.println("Attempting MQTT connection...");
+        if (mqtt_client.connect("ESP32", mqtt_username, mqtt_password))
         {
             Serial.println("mqtt connected");
             mqtt_client.subscribe("/command");
@@ -73,9 +71,13 @@ void callback(char *topic, byte *payload, unsigned int length)
     }
     message[length] = '\0';
     Serial.printf("收到消息: %s\n", message);
-    if (strcmp(message, "pair") == 0)
+    if (strcmp(message, "pair") == 0) // 探头配对
     {
-        infrared_pair();
+        pair_infrared();
+    }
+    else if (strcmp(message, "clear") == 0) // 清空探头
+    {
+        clear_infrared();
     }
 }
 
@@ -89,6 +91,3 @@ void setup_mqtt()
     xTaskCreatePinnedToCore(check_mqtt, "check_mqtt", 8192, nullptr, 1, NULL, 1);
     // xTaskCreate(check_mqtt, "check_mqtt", 4096, nullptr, 1, NULL);
 }
-
-#define MQTT_H
-#endif

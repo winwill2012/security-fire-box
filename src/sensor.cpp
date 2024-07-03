@@ -1,7 +1,5 @@
-#ifndef SENSOR_H
-#include <ModbusMaster.h>
-#include <ArduinoJson.h>
-#include <mqtt.hpp>
+#include <sensor.h>
+
 ModbusMaster node;
 HardwareSerial mySerial(1);
 
@@ -9,8 +7,6 @@ float temp, hum, ppm;
 bool success;
 uint32_t voltage;
 uint8_t result;
-JsonDocument doc;
-char jsonBuffer[512];
 
 void upload_sensor_data(void *ptr)
 {
@@ -27,6 +23,14 @@ void upload_sensor_data(void *ptr)
     if (ppm > 10000)
     {
         ppm = 10000;
+    }
+    if (ppm > 500)
+    {
+        doc["fireState"] = "on";
+    }
+    else
+    {
+        doc["fireState"] = "off";
     }
     Serial.printf("ADC电压值: %d, ppm: %f, 温度: %f, 湿度: %f\n", voltage, ppm, temp, hum);
     doc["gas"] = ppm;
@@ -47,6 +51,3 @@ void setup_sensor()
     TimerHandle_t timer = xTimerCreate("upload_sensor_data", pdMS_TO_TICKS(1000), pdTRUE, NULL, upload_sensor_data);
     xTimerStart(timer, 0);
 }
-
-#define SENSOR_H
-#endif

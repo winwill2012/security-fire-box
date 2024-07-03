@@ -1,6 +1,4 @@
-#ifndef WS2812_HPP
-
-#include <FastLED.h>
+#include <ws2812.h>
 #define NUM_LEDS 1
 #define DATA_PIN 18
 
@@ -16,6 +14,3 @@ void ws2812_show(int color)
     leds[0] = color;
     FastLED.show();
 }
-
-#define WS2812_HPP
-#endif
