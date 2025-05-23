@@ -4,7 +4,7 @@ const char *ssid = "Xiaomi_E15A";
 const char *password = "19910226";
 const char *mqtt_server = "www.welinklab.com";
 const char *mqtt_username = "esp32";
-const char *mqtt_password = "5887188QFGqfg!@#";
+const char *mqtt_password = "";
 
 WiFiClient espClient;
 PubSubClient mqtt_client(espClient);
