@@ -10,4 +10,5 @@ extern JsonDocument doc;
 extern char jsonBuffer[512];
 
 void setup_wifi();
+
 void setup_mqtt();

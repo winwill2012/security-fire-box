@@ -10,6 +10,8 @@
 void setup()
 {
   Serial.begin(115200);
+  pinMode(2, OUTPUT);
+  pinMode(19, OUTPUT);
   setup_ws2812();
   setup_sensor();
   setup_infrared();
