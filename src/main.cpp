@@ -21,6 +21,5 @@ void setup()
 
 void loop()
 {
-  get_current_time();
-  delay(1000);
+
 }
